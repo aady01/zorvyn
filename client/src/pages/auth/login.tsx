@@ -17,7 +17,7 @@ export default function LoginPage() {
     formState: { errors },
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
-    defaultValues: { email: '', password: '' },
+    defaultValues: { email: 'aditya@gmail.com', password: '12345678' },
   });
 
   const onSubmit = (data: LoginFormData) => login.mutate(data);
@@ -34,6 +34,10 @@ export default function LoginPage() {
           <p className="mt-1 text-sm text-muted-foreground">
             Sign in to your Zorvyn Finance account
           </p>
+          <div className="mt-4 rounded-md bg-secondary/50 p-3 text-sm text-muted-foreground border border-border max-w-[320px]">
+            <p className="font-medium text-foreground mb-1">Testing the app?</p>
+            <p>Dummy credentials are pre-filled. Just click <strong className="text-foreground">Sign in</strong> below to explore.</p>
+          </div>
         </div>
 
         <Card className="border-border/50">
