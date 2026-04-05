@@ -1,6 +1,5 @@
 "use client"
 
-import * as React from "react"
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
 
 import {
@@ -144,7 +143,7 @@ export function TrendLine({ data, loading }: TrendLineProps) {
                     }
                     return value;
                   }}
-                  formatter={(value: any, name: any, item: any, index: number, payload: any) => {
+                  formatter={(value: any) => {
                     // Adding currency formatting to tooltip values
                     const val = new Intl.NumberFormat('en-US', {
                       style: 'currency',

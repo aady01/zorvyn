@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { Pie, PieChart, Cell } from "recharts"
+import { Pie, PieChart } from "recharts"
 
 import {
   Card,
@@ -45,7 +45,7 @@ export function CategoryPie({ data, loading }: CategoryPieProps) {
       },
     };
     
-    chartData.forEach((item, index) => {
+    chartData.forEach((item) => {
       // Create a safely formatted key for the config
       const key = item.category.toLowerCase().replace(/[^a-z0-9]/g, '_');
       config[key] = {
@@ -101,7 +101,7 @@ export function CategoryPie({ data, loading }: CategoryPieProps) {
               content={
                 <ChartTooltipContent 
                   hideLabel 
-                  formatter={(value: any, name: any, item: any, index: number, payload: any) => {
+                  formatter={(value: any) => {
                     const val = new Intl.NumberFormat('en-US', {
                       style: 'currency',
                       currency: 'USD',
