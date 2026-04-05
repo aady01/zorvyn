@@ -1,0 +1,135 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Company {
+  id               String            @id @default(uuid())
+  name             String
+  industry         String?
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  budgets          Budget[]
+  financialRecords FinancialRecord[]
+  projects         Project[]
+  teams            Team[]
+  users            User[]
+}
+
+model User {
+  id            String            @id @default(uuid())
+  email         String            @unique
+  password      String
+  name          String
+  role          Role              @default(EMPLOYEE)
+  isActive      Boolean           @default(true)
+  companyId     String
+  teamId        String?
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+  records       FinancialRecord[]
+  refreshTokens RefreshToken[]
+  company       Company           @relation(fields: [companyId], references: [id])
+  team          Team?             @relation(fields: [teamId], references: [id])
+
+  @@index([companyId])
+  @@index([companyId, role])
+  @@index([companyId, teamId])
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  expiresAt DateTime
+  userId    String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model Team {
+  id        String            @id @default(uuid())
+  name      String
+  companyId String
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+  budgets   Budget[]
+  records   FinancialRecord[]
+  company   Company           @relation(fields: [companyId], references: [id])
+  users     User[]
+
+  @@index([companyId])
+}
+
+model Project {
+  id        String            @id @default(uuid())
+  name      String
+  companyId String
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+  records   FinancialRecord[]
+  company   Company           @relation(fields: [companyId], references: [id])
+
+  @@index([companyId])
+}
+
+model FinancialRecord {
+  id        String     @id @default(uuid())
+  amount    Float
+  type      RecordType
+  category  String
+  notes     String?
+  date      DateTime
+  userId    String
+  teamId    String
+  projectId String?
+  companyId String
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  company   Company    @relation(fields: [companyId], references: [id])
+  project   Project?   @relation(fields: [projectId], references: [id])
+  team      Team       @relation(fields: [teamId], references: [id])
+  user      User       @relation(fields: [userId], references: [id])
+
+  @@index([companyId])
+  @@index([companyId, date])
+  @@index([companyId, teamId])
+  @@index([companyId, category])
+  @@index([companyId, userId])
+  @@index([teamId])
+  @@index([userId])
+  @@index([date])
+}
+
+model Budget {
+  id          String   @id @default(uuid())
+  totalBudget Float
+  usedAmount  Float    @default(0)
+  period      String
+  teamId      String
+  companyId   String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  company     Company  @relation(fields: [companyId], references: [id])
+  team        Team     @relation(fields: [teamId], references: [id])
+
+  @@unique([teamId, period])
+  @@index([companyId])
+  @@index([companyId, period])
+}
+
+enum Role {
+  EMPLOYEE
+  MANAGER
+  ADMIN
+}
+
+enum RecordType {
+  INCOME
+  EXPENSE
+}
