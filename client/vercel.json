@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/(.*)",
-      "destination": "/index.html"
+      "destination": "https://grand-flavor-feast.lovable.app/$1"
     }
   ]
 }
