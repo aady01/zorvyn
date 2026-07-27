@@ -1,8 +1,8 @@
 {
   "rewrites": [
     {
-      "source": "/(.*)",
-      "destination": "https://grand-flavor-feast.lovable.app/$1"
+      "source": "/:path*",
+      "destination": "/index.html"
     }
   ]
 }
